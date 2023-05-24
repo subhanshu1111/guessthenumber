@@ -8,29 +8,56 @@ document.querySelector('.guess').value = 23;
 let secretNumber = Math.trunc(Math.random() * 20) + 1;
 let score = 20;
 let highScore = 0;
-//functions
+let timer; // Variable to store the timer
+let timeLeft = 50; // Time in seconds
+
+// Functions
 const displayMessage = function (message) {
   document.querySelector('.message').textContent = message;
 };
+
 const displayScore = function (score) {
   document.querySelector('.score').textContent = score;
 };
-//fu
+
+const displayTimer = function (timeLeft) {
+  document.querySelector('.timer').textContent = timeLeft;
+};
+
+const startTimer = function () {
+  displayTimer(timeLeft);
+
+  timer = setInterval(function () {
+    timeLeft--;
+    displayTimer(timeLeft);
+
+    if (timeLeft === 0) {
+      displayMessage('Time is up! ⌛');
+      displayScore(0);
+      clearInterval(timer);
+    }
+  }, 1000);
+};
+
+const stopTimer = function () {
+  clearInterval(timer);
+};
+
+// Event listeners
 document.querySelector('.check').addEventListener('click', function () {
   const guess = Number(document.querySelector('.guess').value);
   if (!guess) {
-    displayMessage('⛔️ no number selected');
+    displayMessage('⛔️ No number selected');
   } else if (guess === secretNumber) {
-    //when player wins the game
+    // When player wins the game
     highScore = score;
     displayMessage('Correct Guess 🎊');
     document.querySelector('.highscore').textContent = highScore;
-
     document.querySelector('.number').textContent = secretNumber;
-    //manipulating css styles in DOM
     document.querySelector('body').style.backgroundColor = '#60b347';
     document.querySelector('.number').style.width = '30rem';
-  } else if (guess != secretNumber) {
+    stopTimer(); // Stop the timer when correct guess is made
+  } else if (guess !== secretNumber) {
     if (score > 1) {
       displayMessage(guess > secretNumber ? '📈 Too high' : '📉 Too low');
       score--;
@@ -38,6 +65,7 @@ document.querySelector('.check').addEventListener('click', function () {
     } else {
       displayMessage('You lost! 🤯');
       displayScore(0);
+      stopTimer(); // Stop the timer when score reaches zero
     }
   }
 });
@@ -48,11 +76,16 @@ document.querySelector('.again').addEventListener('click', function () {
   document.querySelector('.number').textContent = '?';
   displayMessage('Start guessing...');
   displayScore(score);
-  const guess = Number(document.querySelector('.guess').value);
   document.querySelector('body').style.backgroundColor = ' #222';
   document.querySelector('.guess').value = '';
   document.querySelector('.number').style.width = '15rem';
+  stopTimer(); // Stop the timer when starting a new game
+  timeLeft = 50; // Reset the timer value
+  startTimer(); // Start the timer again
 });
+
+// Start the timer when the page loads
+startTimer();
 
 /*Coding Challenge #1
 Implement a game rest functionality, so that the player can make a new guess!
