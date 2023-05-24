@@ -25,11 +25,11 @@ The game is simple to play. Just follow these steps:
 -   The game provides feedback after each guess.
 -   The game is built with JavaScript.
 -   This game features DOM manipulation in Javascript.
+-   This game has a timer feature.
 
 ## To Do
 
 -   Add more levels to the game.
--   Add a timer to the game.
 -   Add a leaderboard to the game.
 
 ## Author
